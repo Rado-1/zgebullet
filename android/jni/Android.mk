@@ -6,13 +6,22 @@ LOCAL_MODULE := ZgeBullet
 
 MY_BULLET_PATH := bullet3-2.85.1/src
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(MY_BULLET_PATH)
-LOCAL_CPPFLAGS += -fexceptions -frtti
+LOCAL_CPPFLAGS += -fexceptions -frtti -g
 LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -ldl -lm -lstdc++
 
-# uncomment for ARMv7-A
-LOCAL_CFLAGS := -march=armv7-a -mfloat-abi=softfp
+APP_STL := c++_static
+LOCAL_CPPFLAGS += -O2
 
-TARGET_PLATFORM := android-8
+# Set architecture-specific flags
+ifeq ($(TARGET_ARCH_ABI), armeabi-v7a)
+    LOCAL_CFLAGS += -march=armv7-a -mfloat-abi=softfp
+endif
+
+ifeq ($(TARGET_ARCH_ABI), arm64-v8a)
+    LOCAL_CFLAGS += -march=armv8-a
+endif
+
+TARGET_PLATFORM := android-21
 
 LOCAL_SRC_FILES := \
     src/ZgeBullet.cpp\
